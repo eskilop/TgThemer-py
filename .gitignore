@@ -5,3 +5,7 @@ __pycache__
 .vscode
 
 .pytest_cache
+
+*.attheme
+
+sample.py

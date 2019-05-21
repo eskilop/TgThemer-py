@@ -4,8 +4,11 @@ from math import ceil
 
 def to_sint(hexval):
     # hexval in form of #FFFFFF
-    value = int(hexval[1:], 16)
-    return -((value ^ 0xffffffff) + 1)
+    value = int(hexval, 16) if hexval[0] != '#' else int(hexval[1:], 16)
+    if (value & 0x80000000) == 0x80000000:
+        return -((value ^ 0xffffffff) + 1)
+    else:
+        return value
 
 
 def to_hex(value):
