@@ -19,29 +19,45 @@ class Themer:
             pass
             # raise ValueError("You must specify either args or kwargs")
 
-    def read_file(self, name):
-        source = open(name+'.attheme', 'r')
+    def read_file(self, inputfile):
+        source = open(inputfile+'.attheme', 'r')
         contents = source.read()
         source.close()
-        pairs = contents.split('\n')
-        for pair in pairs:
-            if pair != '':
-                kvpair = pair.split('=')
-                self.colordict[kvpair[0]] = utils.to_hex(int(kvpair[1]))
+        return contents
 
-    def to_string(self, name):
-        result = open(name+'.attheme', 'w')
-        for k, v in self.colordict.items():
-            result.write("{}={}\n".format(k, v))
+    def to_file(self, contents, outfile):
+        result = open(outfile+'.attheme', 'w')
+
         result.close()
 
-    def to_final(self, sname, dname):
-        source = open(sname+'.attheme', 'r')
-        contents = source.read()
-        source.close()
+    def to_string(self, contents_dict):
+        result = ""
+        for k, v in contents_dict.items():
+            result += "{}={}\n".format(k, v)
+        return result
+
+    def to_dict(self, contents):
+        result_dict = {}
         pairs = contents.split('\n')
         for pair in pairs:
             if pair != '':
                 kvpair = pair.split('=')
-                self.colordict[kvpair[0]] = utils.to_sint(kvpair[1])
-        self.to_string(dname)
+                result_dict[kvpair[0]] = kvpair[1]
+
+    def _transform_dict(self, contents_dict, fn):
+        result = {}
+        for k, v in contents_dict.items():
+            result[k] = fn(v)
+        return result
+
+    def to_human_readable(self, contents_dict):
+        return self._transform_dict(
+            contents_dict,
+            lambda x: utils.to_hex(int(x))
+        )
+
+    def to_telegram_readable(self, contents_dict):
+        return self._transform_dict(
+            contents_dict,
+            lambda x: utils.to_sint(x)
+        )
