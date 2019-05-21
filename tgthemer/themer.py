@@ -27,7 +27,7 @@ class Themer:
 
     def to_file(self, contents, outfile):
         result = open(outfile+'.attheme', 'w')
-
+        result.write(contents)
         result.close()
 
     def to_string(self, contents_dict):
