@@ -1,63 +1,35 @@
 from colorutils import Color
 import tgthemer.utils as utils
 
+std_none = "#00000000"
+
 
 class Themer:
-    def __init__(self, *args, **kwargs):
-        self.colordict = {}
-        if args == () and kwargs != {}:
-            self.primary = kwargs['primary']
-            self.secondary = kwargs['secondary']
-            self.accent = kwargs['accent']
-            self.mode = kwargs['mode']
-        elif args != () and kwargs == {}:
-            self.primary = args[0]
-            self.secondary = args[1]
-            self.accent = args[2]
-            self.mode = args[3]
+
+    def __init__(self, primary=std_none, secondary=std_none, accent=std_none,
+                 mode="darken"):
+        self.mode = mode
+        self.primary = primary
+        if secondary == std_none:
+            self.secondary = utils.lighten(Color(hex=self.primary), 0.5).hex \
+                if self.mode == 'lighten' \
+                else utils.lighten(Color(hex=self.primary), -0.5).hex
         else:
-            pass
-            # raise ValueError("You must specify either args or kwargs")
+            self.secondary = secondary
+        self.accent = accent
 
-    def read_file(self, inputfile):
-        source = open(inputfile+'.attheme', 'r')
-        contents = source.read()
-        source.close()
-        return contents
+    def generate(self):
 
-    def to_file(self, contents, outfile):
-        result = open(outfile+'.attheme', 'w')
-        result.write(contents)
-        result.close()
+        contents = utils.read_file("source_dark")
+        human = utils.tgstr_to_hstr(contents)
+        out_contents = human \
+            .replace('#FF6FB3E6', self.accent) \
+            .replace('#FF212426', self.primary) \
+            .replace('#FF1F2122', self.primary) \
+            .replace('#FF26292B', self.secondary)
 
-    def to_string(self, contents_dict):
-        result = ""
-        for k, v in contents_dict.items():
-            result += "{}={}\n".format(k, v)
-        return result
+        tgstr = utils.hstr_to_tgstr(out_contents)
 
-    def to_dict(self, contents):
-        result_dict = {}
-        pairs = contents.split('\n')
-        for pair in pairs:
-            if pair != '':
-                kvpair = pair.split('=')
-                result_dict[kvpair[0]] = kvpair[1]
-
-    def _transform_dict(self, contents_dict, fn):
-        result = {}
-        for k, v in contents_dict.items():
-            result[k] = fn(v)
-        return result
-
-    def to_human_readable(self, contents_dict):
-        return self._transform_dict(
-            contents_dict,
-            lambda x: utils.to_hex(int(x))
-        )
-
-    def to_telegram_readable(self, contents_dict):
-        return self._transform_dict(
-            contents_dict,
-            lambda x: utils.to_sint(x)
+        utils.to_file(
+            tgstr, 'out_theme'
         )

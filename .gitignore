@@ -9,3 +9,7 @@ __pycache__
 *.attheme
 
 sample.py
+
+extract_unique.py
+
+generate_theme.py
