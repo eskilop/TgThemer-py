@@ -34,3 +34,6 @@ class TestUtils(object):
         tgdict = {'myval': -15198177}
         assert utils.tgdict_to_hdict(
             tgdict) == {"myval": '#FF18181F'}
+
+    def test_edit_alpha(self):
+        assert utils.edit_alpha('#FF', -0.1) == "#E6"

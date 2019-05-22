@@ -23,21 +23,10 @@ class Themer:
 
         def darken(color, percent): return utils.lighten(color, -(percent))
 
-        def edit_alpha(color, percent):
-            initial_alpha = color[0:2] if color[0] != '#' else color[1:3]
-            return (hex(int(round(
-                int(initial_alpha, 16) +
-                (int(initial_alpha, 16) * percent)
-            ))) if percent > 0
-                else hex(int(round(
-                    int(initial_alpha, 16) +
-                    (int(initial_alpha, 16) * percent)
-                )))).replace('0x', '#') + color[3:]
-
         white = "#FFFFFFFF"
-        white_2 = edit_alpha(white, -0.8)
-        white_5 = edit_alpha(white, -0.5)
-        white_8 = edit_alpha(white, -0.2)
+        white_2 = utils.edit_alpha(white, -0.8)
+        white_5 = utils.edit_alpha(white, -0.5)
+        white_8 = utils.edit_alpha(white, -0.2)
 
         source = "sources/android/source_dark" \
             if self.type == 'dark' \
