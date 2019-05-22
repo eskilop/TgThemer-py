@@ -17,10 +17,18 @@ def to_hex(value):
 
 def lighten(base, percent):
     def lightenColor(val): return ceil(min([val + val * percent, 255.0]))
+
+    def darkenColor(val): return ceil(max([val + val * percent, 0.0]))
+
     return Color(
         (
             lightenColor(base.red),
             lightenColor(base.green),
             lightenColor(base.blue)
-        )
+        )) if percent >= 0 else Color(
+            (
+                darkenColor(base.red),
+                darkenColor(base.green),
+                darkenColor(base.blue)
+            )
     )
