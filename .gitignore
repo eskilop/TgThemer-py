@@ -6,8 +6,6 @@ __pycache__
 
 .pytest_cache
 
-*.attheme
-
 sample.py
 
 extract_unique.py
