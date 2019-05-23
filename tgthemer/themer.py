@@ -107,7 +107,9 @@ class Themer:
             # buttons
             self.theme_dict['dialogButton'] = self.accent.hex
             self.theme_dict['chats_actionIcon'] = self._accent_text(
-                self.accent).edit_alpha(-0.1)
+                self.accent).edit_alpha(-0.5)
+            self.theme_dict['profile_actionIcon'] = self._accent_text(
+                self.accent).edit_alpha(-0.5)
             self.theme_dict['chats_actionBackground'] = self.accent.hex
             self.theme_dict['chats_actionPressedBackground'] = self.accent.lighten(
                 0.2).hex
@@ -171,6 +173,11 @@ class Themer:
             self.theme_dict['chat_replyPanelName'] = self.accent.lighten(
                 0.1).hex
             self.theme_dict['chat_replyPanelIcons'] = self.accent.hex
+            self.theme_dict['chat_goDownButtonCounterBackground'] = self.accent.hex
+            self.theme_dict['chat_goDownButtonCounter'] = self._accent_text(self.accent).edit_alpha(
+                -0.5)
+            self.theme_dict['chat_fieldOverlayText'] = self.accent.edit_alpha(
+                -0.25)
 
             # texts
             self.theme_dict['windowBackgroundWhiteHintText'] = white_2
