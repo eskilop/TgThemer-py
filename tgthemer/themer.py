@@ -449,6 +449,20 @@ class Themer:
             set('chat_attachSendIcon', acc_icon)
             # dialogCameraIcon ok
 
+            set('avatar_actionBarIconBlue', sec_text)
+            set('avatar_actionBarSelectorBlue', self.secondary.alpha(-0.8))
+            set('profile_title', sec_text.alpha(-0.1))
+            set('avatar_subtitleInProfileBlue', sec_text.alpha(-0.25))
+            set('actionBarDefaultSubmenuItem', sec_text.alpha(-0.25))
+            set('listSelectorSDK21', self.secondary.alpha(-0.8))
+            set('windowBackgroundWhiteValueText', self.accent)
+            set('windowBackgroundwhiteGrayIcon', self.tertiary)
+            set('windowBackgroundWhiteBlueHeader', self.accent)
+            set('avatar_backgroundInProfileBlue', self.accent)
+            set('profile_actionIcon', acc_icon)
+            set('profile_actionBackground', self.accent)
+            set('profile_actionPressedBackground', self.accent.alpha(-0.25))
+
         os.mkdir('out', 0o755)
 
         self.to_file(self.telegram_string, 'out/android')
