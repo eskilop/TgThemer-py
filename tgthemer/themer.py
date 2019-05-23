@@ -50,10 +50,15 @@ class Themer:
                 setattr(self.theme_dict, k, v)
         else:
             white = Color(hex="#FFFFFFFF")
+            black = Color(hex="#FF000000")
             white_2 = white.edit_alpha(-0.8).hex
             white_5 = white.edit_alpha(-0.5).hex
             white_8 = white.edit_alpha(-0.2).hex
             white_9 = white.edit_alpha(-0.1).hex
+            black_9 = black.edit_alpha(-0.1).hex
+            black_8 = black.edit_alpha(-0.2).hex
+            black_5 = black.edit_alpha(-0.5).hex
+            black_2 = black.edit_alpha(-0.8).hex
 
             bgsect_color = self.primary.lighten(-0.2).hex
             dialogs_bg = self.primary.lighten(-0.25).hex
@@ -101,6 +106,8 @@ class Themer:
 
             # buttons
             self.theme_dict['dialogButton'] = self.accent.hex
+            self.theme_dict['chats_actionIcon'] = self._accent_text(
+                self.accent).edit_alpha(-0.1)
             self.theme_dict['chats_actionBackground'] = self.accent.hex
             self.theme_dict['chats_actionPressedBackground'] = self.accent.lighten(
                 0.2).hex
@@ -178,6 +185,13 @@ class Themer:
         os.mkdir('out', 0o755)
 
         self.to_file(self.telegram_string, 'out/android')
+
+    def _accent_text(self, color):
+        mid = Color(hex="#FF808080")
+        if color.argb > mid.argb:
+            return Color(hex='#FF000000')
+        elif color.argb < mid.argb:
+            return Color(hex='#FFFFFFFF')
 
     def _to_string(self, content_dict):
         result = ""
