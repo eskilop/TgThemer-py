@@ -73,7 +73,7 @@ class Color:
             )
         ))
 
-    def edit_alpha(self, percent):
+    def alpha(self, percent):
         initial_alpha = self.hex[1:3]
         return Color(
             hex=(

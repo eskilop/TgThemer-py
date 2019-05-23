@@ -49,145 +49,152 @@ class Themer:
             for k, v in custom.items():
                 setattr(self.theme_dict, k, v)
         else:
-            white = Color(hex="#FFFFFFFF")
-            black = Color(hex="#FF000000")
-            white_2 = white.edit_alpha(-0.8).hex
-            white_5 = white.edit_alpha(-0.5).hex
-            white_8 = white.edit_alpha(-0.2).hex
-            white_9 = white.edit_alpha(-0.1).hex
-            black_9 = black.edit_alpha(-0.1).hex
-            black_8 = black.edit_alpha(-0.2).hex
-            black_5 = black.edit_alpha(-0.5).hex
-            black_2 = black.edit_alpha(-0.8).hex
 
-            bgsect_color = self.primary.lighten(-0.2).hex
-            dialogs_bg = self.primary.lighten(-0.25).hex
+            def set(key, color):
+                self.theme_dict[key] = color.hex
 
-            # accents
-            self.theme_dict[
-                'windowBackgroundWhiteInputFieldActivated'
-            ] = self.accent.hex
+            pri_text = self._accent_text(self.primary)
+            sec_text = self._accent_text(self.secondary)
+            acc_text = self._accent_text(self.accent)
+            title_text = pri_text.alpha(-0.1)
+            msg_text = pri_text.alpha(-0.2)
+            info_text = pri_text.alpha(-0.75)
 
-            # backgrounds
-            self.theme_dict['windowBackgroundWhite'] = self.primary.hex
-            self.theme_dict['dialogBackground'] = dialogs_bg
-            self.theme_dict['windowBackgroundGray'] = bgsect_color
-            self.theme_dict['graySection'] = bgsect_color
-            self.theme_dict['chats_menuBackground'] = bgsect_color
-            self.theme_dict['dialogBackgroundGray'] = bgsect_color
-            self.theme_dict['chat_wallpaper'] = self.primary.lighten(-0.5).hex
-            self.theme_dict['dialogIcon'] = white_8
-            self.theme_dict['dialogBadgeBackground'] = self.accent.hex
-            self.theme_dict['dialogLineProgressBackground'] = white_5
-            self.theme_dict['dialogLineProgress'] = self.accent.hex
-
-            # actionbar
-            self.theme_dict['actionBarDefault'] = self.secondary.hex
-            self.theme_dict['actionBarDefaultIcon'] = white.hex
-            self.theme_dict['avatar_backgroundActionBarBlue'] = self.secondary.hex
-            self.theme_dict['actionBarDefaultTitle'] = white_9
-            self.theme_dict['actionBarDefaultArchived'] = self.secondary.hex
-
-            # menu
-            self.theme_dict['chats_menuItemIcon'] = self.secondary.lighten(
-                1).hex
-            self.theme_dict['chats_menuItemText'] = white_8
-
-            # submenu
-            self.theme_dict['actionBarDefaultSubmenuBackground'] = dialogs_bg
-            self.theme_dict['actionBarDefaultSubmenuItemIcon'] = self.secondary.lighten(
-                1).hex
-            self.theme_dict['actionBarDefaultSubmenuItem'] = white_8
-
-            # dialogs
-            self.theme_dict['dialogTextGray2'] = white_8
-            self.theme_dict['dialogTextBlack'] = white_8
-            self.theme_dict['dialogBadgeText'] = white_8
-
-            # buttons
-            self.theme_dict['dialogButton'] = self.accent.hex
-            self.theme_dict['chats_actionIcon'] = self._accent_text(
-                self.accent).edit_alpha(-0.5)
-            self.theme_dict['profile_actionIcon'] = self._accent_text(
-                self.accent).edit_alpha(-0.5)
-            self.theme_dict['chats_actionBackground'] = self.accent.hex
-            self.theme_dict['chats_actionPressedBackground'] = self.accent.lighten(
-                0.2).hex
-            self.theme_dict['profile_actionBackground'] = self.accent.hex
-            self.theme_dict['profile_actionPressedBackground'] = self.accent.lighten(
-                0.2).hex
-
-            # switchs
-            self.theme_dict['switchTrackChecked'] = self.accent.hex
-
-            # checkboxs
-            self.theme_dict['dialogCheckboxSquareBackground'] = white_2
-            self.theme_dict['dialogCheckboxSquareCheck'] = white.hex
-            self.theme_dict['dialogCheckboxSquareDisabled'] = white_2
-            self.theme_dict['dialogCheckboxSquareUnchecked'] = white_2
-            self.theme_dict['dialogRoundCheckBox'] = self.accent.hex
-
-            # avatar
-            self.theme_dict['avatar_nameInMessageBlue'] = self.accent.hex
-
-            # chat
-            self.theme_dict['chat_inBubble'] = self.primary.lighten(0.1).hex
-            self.theme_dict['chat_inBubbleSelected'] = self.primary.lighten(
-                0.1).lighten(0.1).hex
-            self.theme_dict['chat_outBubble'] = self.secondary.lighten(0.1)
-            self.theme_dict['chat_outBubbleSelected'] = self.secondary.lighten(
-                0.1).lighten(0.1).hex
-            self.theme_dict['chat_messageLinkIn'] = self.accent.hex
-            self.theme_dict['chat_messageLinkOut'] = self.accent.lighten(0.2)
-            self.theme_dict['chat_outSentCheck'] = self.accent.hex
-            self.theme_dict['chat_outSentCheckSelected'] = self.accent.lighten(
-                0.1).hex
-            self.theme_dict['chat_outSentClock'] = self.accent.lighten(
-                -0.2).hex
-            self.theme_dict['chat_outSentClockSelected'] = self.accent.lighten(
-                0.1).hex
-            self.theme_dict['chat_inSentClock'] = self.secondary.lighten(
-                -0.1).hex
-            self.theme_dict['chat_inSentClockSelected'] = self.secondary.lighten(
-                -0.1).lighten(0.2)
-
-            self.theme_dict['chat_messagePanelSend'] = self.accent.hex
-            self.theme_dict['chat_messagePanelHint'] = white_5
-            self.theme_dict['chat_messagePanelIcons'] = self.secondary.lighten(
-                1).hex
-            self.theme_dict['chat_messagePanelBackground'] = self.primary.lighten(
-                -0.1).hex
-            self.theme_dict['chats_nameMessage_threeLines'] = self.accent.lighten(
-                0.1).hex
-            self.theme_dict['chats_nameMessage'] = self.accent.lighten(
-                0.1).hex
-            self.theme_dict['chat_emojiPanelBackground'] = self.primary.lighten(
-                0.2).hex
-            self.theme_dict['chat_emojiPanelNewTrending'] = self.accent.hex
-            self.theme_dict['chat_emojiPanelIconSelected'] = self.accent.hex
-            self.theme_dict['chat_emojiPanelBadgeBackground'] = self.accent.hex
-            self.theme_dict['chat_topPanelBackground'] = self.primary.lighten(
-                -0.1).hex
-            self.theme_dict['chat_topPanelTitle'] = self.accent.hex
-            self.theme_dict['chat_topPanelLine'] = self.accent.hex
-            self.theme_dict['chat_replyPanelName'] = self.accent.lighten(
-                0.1).hex
-            self.theme_dict['chat_replyPanelIcons'] = self.accent.hex
-            self.theme_dict['chat_goDownButtonCounterBackground'] = self.accent.hex
-            self.theme_dict['chat_goDownButtonCounter'] = self._accent_text(self.accent).edit_alpha(
-                -0.5)
-            self.theme_dict['chat_fieldOverlayText'] = self.accent.edit_alpha(
-                -0.25)
-
-            # texts
-            self.theme_dict['windowBackgroundWhiteHintText'] = white_2
-            self.theme_dict['windowBackgroundWhiteLinkText'] = self.accent.hex
-            self.theme_dict['windowBackgroundWhiteValueText'] = self.accent.hex
-            self.theme_dict['windowBackgroundWhiteGrayIcon'] = self.secondary.lighten(
-                1).hex
-            # optional link color?
-            self.theme_dict['dialogLinkSelection'] = self.accent.hex
-            self.theme_dict['windowBackgroundWhiteBlueHeader'] = self.accent.hex
+            set('windowBackgroundWhite', self.primary)
+            set('actionBarDefault', self.secondary)
+            set('actionBarDefaultIcon', sec_text.alpha(-0.1))
+            set('actionBarDefaultTitle', sec_text.alpha(-0.1))
+            set('actionBarDefaultSelector', acc_text.alpha(-0.8))
+            set('actionBarDefaultSearch', sec_text.alpha(-0.2))
+            set('actionBarDefaultSearchPlaceholder', sec_text.alpha(-0.8))
+            set('actionBarActionModeDefaultIcon', sec_text.alpha(-0.1))
+            set('actionBarActionModeDefault', self.secondary)
+            set('actionBarActionModeDefaultTop', self.secondary.lighten(0.25))
+            set('actionBarActionModeDefaultSelector', acc_text.alpha(-0.8))
+            set('divider', pri_text.alpha(-0.9))
+            set('emptyListPlaceholder', pri_text.alpha(-0.8))
+            set('progressCircle', self.accent)
+            set('chats_nameMessage_threeLines', self.accent.alpha(-0.2))
+            set('chats_message', msg_text)
+            set('chats_actionIcon', acc_text.alpha(-0.5))
+            set('chats_actionBackground', self.accent)
+            set('chats_actionPressedBackground', self.accent.lighten(0.25))
+            set('avatar_text', acc_text.alpha(-0.5))
+            set('avatar_backgroundSaved', self.accent)
+            set('avatar_backgroundArchived', self.secondary.lighten(0.5))
+            set('avatar_backgroundArchivedHidden', self.secondary.lighten(0.25))
+            set('chats_unreadCounter',  self.accent)
+            set('chats_unreadCounterMuted', self.secondary.lighten(0.5))
+            set('chats_unreadCounterText', acc_text.alpha(-0.5))
+            set('chats_name', title_text)
+            set('chats_secretName', self.accent.alpha(-0.15))
+            set('chats_secretIcon', self.accent.alpha(-0.15))
+            # set('chats_draft', )
+            set('chats_pinnedIcon', pri_text.alpha(-0.5))
+            set('chats_message_threeLines', msg_text)
+            set('chats_nameMessage', self.accent.alpha(-0.25))
+            set('chats_attachMessage', msg_text)
+            set('chats_nameArchived', self.accent.alpha(-0.25))
+            set('chats_messageArchived', msg_text)
+            set('chats_actionMessage', msg_text)
+            set('chats_date', msg_text)
+            set('chats_pinnedOverlay', acc_text.alpha(-0.75))
+            # set('chats_tabletSelectedOverlay')
+            set('chats_sentCheck', self.accent.alpha(-0.2))
+            set('chats_sentClock', msg_text)
+            # set('chats_sentError') chats_sentErrorIcon
+            set('chats_verifiedCheck', acc_text.alpha(-0.5))
+            set('chats_verifiedBackground', self.accent.alpha(-0.2))
+            set('chats_muteIcon', msg_text)
+            set('chats_mentionIcon', acc_text)
+            set('chats_archivePinBackground', self.primary.lighten(0.5))
+            set('chats_archiveBackground', self.accent)
+            set('chats_archiveIcon', acc_text)
+            set('chats_menuBackground', self.primary.lighten(-0.25))
+            set('chats_menuName', self.accent.alpha(-0.2))
+            set('chats_menuPhone', info_text)
+            # set('chats_menuPhoneCats', ) 'chats_menuCloudBackgroundCats',
+            # chat_serviceBackground, chats_menuTopShadow
+            set('avatar_backgroundActionBarBlue', self.secondary)
+            set('chats_menuItemIcon', self.secondary.lighten(1))
+            set('chats_menuItemText', msg_text)
+            set('windowBackgroundWhiteGrayText3', info_text)
+            set('windowBackgroundWhiteBlueText3', self.accent.alpha(-0.2))
+            set('key_graySectionText', info_text)
+            set('graySection', self.primary.lighten(-0.25))
+            set('windowBackgroundWhiteBlackText', msg_text)
+            set('actionBarDefaultArchived', self.secondary)
+            set('windowBackgroundGrayShadow', Color(hex='#FF000000'))
+            set('windowBackgroundGray', self.primary.lighten(-0.25))
+            set('chats_archiveText', acc_text.alpha(-0.25))
+            set('chats_onlineCircle', self.accent)
+            set('inappPlayerBackground', self.primary.lighten(0.15))
+            set('inappPlayerPlayPause', self.secondary.lighten(0.25))
+            set('inAppPlayerTitle', msg_text)
+            set('inappPlayerPerformer', msg_text)
+            set('inappPlayerClose', pri_text)
+            set('returnToCallBackground', self.accent)
+            set('returnToCallText', acc_text)
+            set('undo_background', self.secondary)
+            set('undo_cancelColor', self.accent)
+            set('undo_infoColor', sec_text)
+            set('dialogBackground', self.secondary)
+            # set('dialogBackgroundGray')
+            set('dialogTextBlack', sec_text.lighten(-0.1))
+            set('dialogTextLink', self.accent)
+            set('dialogLinkSection', self.accent.alpha(-0.25))
+            set('dialogTextBlue', self.accent)
+            set('dialogTextBlue2', self.accent)
+            set('dialogTextBlue3', self.accent)
+            set('dialogTextBlue4', self.accent)
+            # dialogTextRed dialogTextRed2
+            set('dialogTextGray', sec_text)
+            set('dialogTextGray2', sec_text)
+            set('dialogTextGray3', sec_text)
+            set('dialogTextGray4', sec_text)
+            set('dialogIcon', title_text)
+            # set('dialogRedIcon')
+            set('dialogTextHint', sec_text.alpha(-0.1))
+            set('dialogInputField', self.secondary)
+            set('dialogInputFieldActivated', self.accent)
+            set('dialogCheckboxSquareBackground', self.accent)
+            set('dialogCheckboxSquareCheck', acc_text)
+            set('dialogCheckboxSquareUnchecked', self.primary)
+            set('dialogCheckboxSquareDisabled', self.primary.lighten(-0.1))
+            set('dialogRadioBackground', self.primary)
+            set('dialogRadioBackgroundChecked', self.accent)
+            set('dialogProgressCircle', self.accent)
+            set('dialogButton', self.accent)
+            set('dialogButtonSelector', acc_text.alpha(-0.8))
+            set('dialogScrollGlow', sec_text.lighten(0.25))
+            set('dialogRoundCheckBox', self.accent)
+            set('dialogRoundCheckBoxCheck', acc_text)
+            set('dialogBadgeBackground', self.accent)
+            set('dialogBadgeText', acc_text)
+            set('dialogLineProgress', self.accent)
+            set('dialogLineProgressBackground', self.primary)
+            # set('dialogGrayLine',
+            set('dialogSearchBackground', self.secondary)
+            set('dialogSearchHint', info_text)
+            set('dialogSearchIcon', msg_text)
+            set('dialogSearchText', msg_text)
+            set('dialogFloatingIcon', acc_text)
+            # dialogShadowLine key_sheet_scrollUp key_sheet_other
+            set('player_actionBar', self.secondary)
+            set('player_actionBarSelecto', self.secondary.alpha(-0.7))
+            set('player_actionBarTitle', sec_text)
+            set('player_actionBarTop', self.secondary.lighten(0.5))
+            set('player_actionBarSubtitle', sec_text)
+            set('player_actionBarItems', sec_text.alpha(-0.1))
+            set('player_background', self.primary)
+            set('player_time', msg_text)
+            set('player_progressBackground', self.secondary)
+            # set('key_player_progressCachedBackground')
+            set('player_progress', self.accent)
+            set('player_placeholder', sec_text)
+            set('player_placeholderBackground', self.secondary)
+            set('player_button', pri_text.alpha(-0.1))
+            set('player_buttonActive', self.accent)
 
         os.mkdir('out', 0o755)
 
