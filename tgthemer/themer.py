@@ -1,5 +1,6 @@
-from colorutils import Color
-import tgthemer.utils as utils
+from .color import Color
+import shutil
+import os
 
 std_none = "#000000"
 
@@ -11,92 +12,134 @@ class Themer:
         self.mode = mode
         self.primary = Color(hex=primary)
         if secondary == std_none:
-            self.secondary = utils.lighten(self.primary, 0.5) \
+            self.secondary = self.primary.lighten(0.5) \
                 if self.mode == 'lighten' \
-                else utils.lighten(self.primary, -0.5)
+                else self.primary.lighten(-0.5)
         else:
             self.secondary = Color(hex=secondary)
         self.accent = Color(hex=accent)
-        self.type = ttype
+        self.ttype = ttype
+
+        self.contents = ""
+        self.theme_dict = {}
+
+    def read_file(self, inputfile):
+        source = open(inputfile+'.attheme', 'r')
+        contents = source.read()
+        source.close()
+        self.contents = contents
+        self.theme_dict = self._to_dict()
+
+    def to_file(self, contents, outfile):
+        result = open(outfile+'.attheme', 'w')
+        result.write(contents)
+        result.close()
 
     def generate_android(self):
 
-        def darken(color, percent): return utils.lighten(color, -(percent))
+        shutil.rmtree('out', ignore_errors=True)
 
-        white = "#FFFFFFFF"
-        white_2 = utils.edit_alpha(white, -0.8)
-        white_5 = utils.edit_alpha(white, -0.5)
-        white_8 = utils.edit_alpha(white, -0.2)
+        white = Color(hex="#FFFFFFFF")
+        white_2 = white.edit_alpha(-0.8)
+        white_5 = white.edit_alpha(-0.5)
+        white_8 = white.edit_alpha(-0.2)
 
         source = "sources/android/source_dark" \
-            if self.type == 'dark' \
+            if self.ttype == 'dark' \
             else "sources/android/source_light"
 
-        contents = utils.read_file(source)
-        human_dict = utils.to_dict(utils.tgstr_to_hstr(contents))
+        contents = self.read_file(source)
+        self.theme_dict = self.human_dict
 
-        bgsect_color = darken(self.primary, 0.2).hex.replace(
-            '#', '#FF').upper()
-        dialogs_bg = utils.lighten(
-            self.primary, 0.5).hex.replace('#', '#FF').upper()
+        bgsect_color = self.primary.lighten(-0.2).hex
+        dialogs_bg = self.primary.lighten(0.5).hex
 
         # accents
-        human_dict['windowBackgroundWhiteInputFieldActivated'] = self.accent.hex.replace(
-            '#', '#FF').upper()
+        self.theme_dict[
+            'windowBackgroundWhiteInputFieldActivated'
+        ] = self.accent.hex
 
         # backgrounds
-        human_dict['windowBackgroundWhite'] = self.primary.hex.replace(
-            '#', '#FF').upper()
-        human_dict['dialogBackground'] = dialogs_bg
-        human_dict['windowBackgroundGray'] = bgsect_color
-        human_dict['graySection'] = bgsect_color
-        human_dict['chats_menuBackground'] = bgsect_color
-        human_dict['dialogBackgroundGray'] = bgsect_color
-        human_dict['chat_wallpaper'] = darken(
-            self.primary, 0.5).hex.replace('#', '#FF').upper()
-        human_dict['dialogIcon'] = white_8
-        human_dict['dialogBadgeBackground'] = self.accent.hex.replace(
-            '#', '#FF').upper()
-        human_dict['dialogLineProgressBackground'] = white_5
-        human_dict['dialogLineProgress'] = self.accent.hex.replace(
-            '#', '#FF').upper()
+        self.theme_dict['windowBackgroundWhite'] = self.primary.hex
+        self.theme_dict['dialogBackground'] = dialogs_bg
+        self.theme_dict['windowBackgroundGray'] = bgsect_color
+        self.theme_dict['graySection'] = bgsect_color
+        self.theme_dict['chats_menuBackground'] = bgsect_color
+        self.theme_dict['dialogBackgroundGray'] = bgsect_color
+        self.theme_dict['chat_wallpaper'] = self.primary.lighten(-0.5).hex
+        self.theme_dict['dialogIcon'] = white_8
+        self.theme_dict['dialogBadgeBackground'] = self.accent.hex
+        self.theme_dict['dialogLineProgressBackground'] = white_5
+        self.theme_dict['dialogLineProgress'] = self.accent.hex
 
         # actionbar default
-        human_dict['actionBarDefault'] = self.secondary.hex.replace(
-            '#', '#FF').upper()
-        human_dict['actionBarDefaultIcon'] = white
-
+        self.theme_dict['actionBarDefault'] = self.secondary.hex
+        self.theme_dict['actionBarDefaultIcon'] = white.hex
         # menu
-        human_dict['actionBarDefaultSubmenuBackground'] = dialogs_bg
+        self.theme_dict['actionBarDefaultSubmenuBackground'] = dialogs_bg
 
         # buttons
-        human_dict['dialogButton'] = self.accent.hex.replace(
-            '#', '#FF').upper()
+        self.theme_dict['dialogButton'] = self.accent.hex
 
         # checkboxs
-        human_dict['dialogCheckboxSquareBackground'] = white_2
-        human_dict['dialogCheckboxSquareCheck'] = white
-        human_dict['dialogCheckboxSquareDisabled'] = white_2
-        human_dict['dialogCheckboxSquareUnchecked'] = white_2
-        human_dict['dialogRoundCheckBox'] = self.accent.hex.replace(
-            '#', '#FF').upper()
+        self.theme_dict['dialogCheckboxSquareBackground'] = white_2
+        self.theme_dict['dialogCheckboxSquareCheck'] = white.hex
+        self.theme_dict['dialogCheckboxSquareDisabled'] = white_2
+        self.theme_dict['dialogCheckboxSquareUnchecked'] = white_2
+        self.theme_dict['dialogRoundCheckBox'] = self.accent.hex
 
         # texts
-        human_dict['windowBackgroundWhiteHintText'] = white_2
-        human_dict['chats_menuItemText'] = white_2
-        human_dict['actionBarDefaultSubmenuItem'] = white_2
-        human_dict['dialogTextGray2'] = white_2
-        human_dict['actionBarDefaultTitle'] = white_5
-        human_dict['dialogTextBlack'] = white_5
-        human_dict['dialogBadgeText'] = white_5
+        self.theme_dict['windowBackgroundWhiteHintText'] = white_2
+        self.theme_dict['chats_menuItemText'] = white_2
+        self.theme_dict['actionBarDefaultSubmenuItem'] = white_2
+        self.theme_dict['dialogTextGray2'] = white_2
+        self.theme_dict['actionBarDefaultTitle'] = white_5
+        self.theme_dict['dialogTextBlack'] = white_5
+        self.theme_dict['dialogBadgeText'] = white_5
         # optional link color?
-        human_dict['dialogLinkSelection'] = self.accent.hex.replace(
-            '#', '#FF').upper()
+        self.theme_dict['dialogLinkSelection'] = self.accent.hex
 
-        utils.to_file(utils.to_string(human_dict), "out/human_readable")
+        os.mkdir('out', 0o755)
 
-        out_contents = utils.to_string(utils.hdict_to_tgdict(human_dict))
+        self.to_file(self.telegram_string, 'out/android')
 
-        utils.to_file(
-            out_contents, 'out/android'
+    def _to_string(self, content_dict):
+        result = ""
+        for k, v in content_dict.items():
+            result += "{}={}\n".format(k, v)
+        return result
+
+    def _to_dict(self):
+        result_dict = {}
+        pairs = self.contents.split('\n')
+        for pair in pairs:
+            if pair != '':
+                kvpair = pair.split('=')
+                result_dict[kvpair[0]] = kvpair[1]
+        return result_dict
+
+    def _transform_dict(self, fn):
+        result = {}
+        for k, v in self.theme_dict.items():
+            result[k] = fn(v)
+        return result
+
+    @property
+    def human_dict(self):
+        return self._transform_dict(
+            lambda x: Color(sint=int(x)).hex
         )
+
+    @property
+    def telegram_dict(self):
+        return self._transform_dict(
+            lambda x: Color(hex=x).sint
+        )
+
+    @property
+    def telegram_string(self):
+        return self._to_string(self.telegram_dict)
+
+    @property
+    def human_string(self):
+        return self._to_string(self.human_dict)
