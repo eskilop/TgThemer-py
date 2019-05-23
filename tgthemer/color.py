@@ -74,17 +74,22 @@ class Color:
         ))
 
     def edit_alpha(self, percent):
-        initial_alpha = self.hex[0:2] \
-            if self.hex[0] != '#' \
-            else self.hex[1:3]
-        return (hex(int(round(
-            int(initial_alpha, 16) +
-            (int(initial_alpha, 16) * percent)
-        ))) if percent > 0
-            else hex(int(round(
-                int(initial_alpha, 16) +
-                (int(initial_alpha, 16) * percent)
-            )))).replace('0x', '#').upper() + self.hex[3:]
+        initial_alpha = self.hex[1:3]
+        return Color(
+            hex=(
+                hex(
+                    int(round(
+                        int(initial_alpha, 16) +
+                        (int(initial_alpha, 16) * percent)
+                    ))
+                ) if percent > 0
+                else hex(
+                    int(round(
+                        int(initial_alpha, 16) +
+                        (int(initial_alpha, 16) * percent)
+                    ))
+                )
+            ).replace('0x', '#').upper() + self.hex[3:])
 
     def __repr__(self):
         return "{}".format(self.hex)

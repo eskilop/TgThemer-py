@@ -50,12 +50,13 @@ class Themer:
                 setattr(self.theme_dict, k, v)
         else:
             white = Color(hex="#FFFFFFFF")
-            white_2 = white.edit_alpha(-0.8)
-            white_5 = white.edit_alpha(-0.5)
-            white_8 = white.edit_alpha(-0.2)
+            white_2 = white.edit_alpha(-0.8).hex
+            white_5 = white.edit_alpha(-0.5).hex
+            white_8 = white.edit_alpha(-0.2).hex
+            white_9 = white.edit_alpha(-0.1).hex
 
             bgsect_color = self.primary.lighten(-0.2).hex
-            dialogs_bg = self.primary.lighten(0.5).hex
+            dialogs_bg = self.primary.lighten(-0.25).hex
 
             # accents
             self.theme_dict[
@@ -75,14 +76,40 @@ class Themer:
             self.theme_dict['dialogLineProgressBackground'] = white_5
             self.theme_dict['dialogLineProgress'] = self.accent.hex
 
-            # actionbar default
+            # actionbar
             self.theme_dict['actionBarDefault'] = self.secondary.hex
             self.theme_dict['actionBarDefaultIcon'] = white.hex
+            self.theme_dict['avatar_backgroundActionBarBlue'] = self.secondary.hex
+            self.theme_dict['actionBarDefaultTitle'] = white_9
+            self.theme_dict['actionBarDefaultArchived'] = self.secondary.hex
+
             # menu
+            self.theme_dict['chats_menuItemIcon'] = self.secondary.lighten(
+                1).hex
+            self.theme_dict['chats_menuItemText'] = white_8
+
+            # submenu
             self.theme_dict['actionBarDefaultSubmenuBackground'] = dialogs_bg
+            self.theme_dict['actionBarDefaultSubmenuItemIcon'] = self.secondary.lighten(
+                1).hex
+            self.theme_dict['actionBarDefaultSubmenuItem'] = white_8
+
+            # dialogs
+            self.theme_dict['dialogTextGray2'] = white_8
+            self.theme_dict['dialogTextBlack'] = white_8
+            self.theme_dict['dialogBadgeText'] = white_8
 
             # buttons
             self.theme_dict['dialogButton'] = self.accent.hex
+            self.theme_dict['chats_actionBackground'] = self.accent.hex
+            self.theme_dict['chats_actionPressedBackground'] = self.accent.lighten(
+                0.2).hex
+            self.theme_dict['profile_actionBackground'] = self.accent.hex
+            self.theme_dict['profile_actionPressedBackground'] = self.accent.lighten(
+                0.2).hex
+
+            # switchs
+            self.theme_dict['switchTrackChecked'] = self.accent.hex
 
             # checkboxs
             self.theme_dict['dialogCheckboxSquareBackground'] = white_2
@@ -91,16 +118,62 @@ class Themer:
             self.theme_dict['dialogCheckboxSquareUnchecked'] = white_2
             self.theme_dict['dialogRoundCheckBox'] = self.accent.hex
 
+            # avatar
+            self.theme_dict['avatar_nameInMessageBlue'] = self.accent.hex
+
+            # chat
+            self.theme_dict['chat_inBubble'] = self.primary.lighten(0.1).hex
+            self.theme_dict['chat_inBubbleSelected'] = self.primary.lighten(
+                0.1).lighten(0.1).hex
+            self.theme_dict['chat_outBubble'] = self.secondary.lighten(0.1)
+            self.theme_dict['chat_outBubbleSelected'] = self.secondary.lighten(
+                0.1).lighten(0.1).hex
+            self.theme_dict['chat_messageLinkIn'] = self.accent.hex
+            self.theme_dict['chat_messageLinkOut'] = self.accent.lighten(0.2)
+            self.theme_dict['chat_outSentCheck'] = self.accent.hex
+            self.theme_dict['chat_outSentCheckSelected'] = self.accent.lighten(
+                0.1).hex
+            self.theme_dict['chat_outSentClock'] = self.accent.lighten(
+                -0.2).hex
+            self.theme_dict['chat_outSentClockSelected'] = self.accent.lighten(
+                0.1).hex
+            self.theme_dict['chat_inSentClock'] = self.secondary.lighten(
+                -0.1).hex
+            self.theme_dict['chat_inSentClockSelected'] = self.secondary.lighten(
+                -0.1).lighten(0.2)
+
+            self.theme_dict['chat_messagePanelSend'] = self.accent.hex
+            self.theme_dict['chat_messagePanelHint'] = white_5
+            self.theme_dict['chat_messagePanelIcons'] = self.secondary.lighten(
+                1).hex
+            self.theme_dict['chat_messagePanelBackground'] = self.primary.lighten(
+                -0.1).hex
+            self.theme_dict['chats_nameMessage_threeLines'] = self.accent.lighten(
+                0.1).hex
+            self.theme_dict['chats_nameMessage'] = self.accent.lighten(
+                0.1).hex
+            self.theme_dict['chat_emojiPanelBackground'] = self.primary.lighten(
+                0.2).hex
+            self.theme_dict['chat_emojiPanelNewTrending'] = self.accent.hex
+            self.theme_dict['chat_emojiPanelIconSelected'] = self.accent.hex
+            self.theme_dict['chat_emojiPanelBadgeBackground'] = self.accent.hex
+            self.theme_dict['chat_topPanelBackground'] = self.primary.lighten(
+                -0.1).hex
+            self.theme_dict['chat_topPanelTitle'] = self.accent.hex
+            self.theme_dict['chat_topPanelLine'] = self.accent.hex
+            self.theme_dict['chat_replyPanelName'] = self.accent.lighten(
+                0.1).hex
+            self.theme_dict['chat_replyPanelIcons'] = self.accent.hex
+
             # texts
             self.theme_dict['windowBackgroundWhiteHintText'] = white_2
-            self.theme_dict['chats_menuItemText'] = white_2
-            self.theme_dict['actionBarDefaultSubmenuItem'] = white_2
-            self.theme_dict['dialogTextGray2'] = white_2
-            self.theme_dict['actionBarDefaultTitle'] = white_5
-            self.theme_dict['dialogTextBlack'] = white_5
-            self.theme_dict['dialogBadgeText'] = white_5
+            self.theme_dict['windowBackgroundWhiteLinkText'] = self.accent.hex
+            self.theme_dict['windowBackgroundWhiteValueText'] = self.accent.hex
+            self.theme_dict['windowBackgroundWhiteGrayIcon'] = self.secondary.lighten(
+                1).hex
             # optional link color?
             self.theme_dict['dialogLinkSelection'] = self.accent.hex
+            self.theme_dict['windowBackgroundWhiteBlueHeader'] = self.accent.hex
 
         os.mkdir('out', 0o755)
 
