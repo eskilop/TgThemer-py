@@ -35,14 +35,8 @@ class Themer:
         result.write(contents)
         result.close()
 
-    def generate_android(self):
-
+    def generate_android(self, custom=None):
         shutil.rmtree('out', ignore_errors=True)
-
-        white = Color(hex="#FFFFFFFF")
-        white_2 = white.edit_alpha(-0.8)
-        white_5 = white.edit_alpha(-0.5)
-        white_8 = white.edit_alpha(-0.2)
 
         source = "sources/android/source_dark" \
             if self.ttype == 'dark' \
@@ -51,53 +45,62 @@ class Themer:
         contents = self.read_file(source)
         self.theme_dict = self.human_dict
 
-        bgsect_color = self.primary.lighten(-0.2).hex
-        dialogs_bg = self.primary.lighten(0.5).hex
+        if custom is not None:
+            for k, v in custom.items():
+                setattr(self.theme_dict, k, v)
+        else:
+            white = Color(hex="#FFFFFFFF")
+            white_2 = white.edit_alpha(-0.8)
+            white_5 = white.edit_alpha(-0.5)
+            white_8 = white.edit_alpha(-0.2)
 
-        # accents
-        self.theme_dict[
-            'windowBackgroundWhiteInputFieldActivated'
-        ] = self.accent.hex
+            bgsect_color = self.primary.lighten(-0.2).hex
+            dialogs_bg = self.primary.lighten(0.5).hex
 
-        # backgrounds
-        self.theme_dict['windowBackgroundWhite'] = self.primary.hex
-        self.theme_dict['dialogBackground'] = dialogs_bg
-        self.theme_dict['windowBackgroundGray'] = bgsect_color
-        self.theme_dict['graySection'] = bgsect_color
-        self.theme_dict['chats_menuBackground'] = bgsect_color
-        self.theme_dict['dialogBackgroundGray'] = bgsect_color
-        self.theme_dict['chat_wallpaper'] = self.primary.lighten(-0.5).hex
-        self.theme_dict['dialogIcon'] = white_8
-        self.theme_dict['dialogBadgeBackground'] = self.accent.hex
-        self.theme_dict['dialogLineProgressBackground'] = white_5
-        self.theme_dict['dialogLineProgress'] = self.accent.hex
+            # accents
+            self.theme_dict[
+                'windowBackgroundWhiteInputFieldActivated'
+            ] = self.accent.hex
 
-        # actionbar default
-        self.theme_dict['actionBarDefault'] = self.secondary.hex
-        self.theme_dict['actionBarDefaultIcon'] = white.hex
-        # menu
-        self.theme_dict['actionBarDefaultSubmenuBackground'] = dialogs_bg
+            # backgrounds
+            self.theme_dict['windowBackgroundWhite'] = self.primary.hex
+            self.theme_dict['dialogBackground'] = dialogs_bg
+            self.theme_dict['windowBackgroundGray'] = bgsect_color
+            self.theme_dict['graySection'] = bgsect_color
+            self.theme_dict['chats_menuBackground'] = bgsect_color
+            self.theme_dict['dialogBackgroundGray'] = bgsect_color
+            self.theme_dict['chat_wallpaper'] = self.primary.lighten(-0.5).hex
+            self.theme_dict['dialogIcon'] = white_8
+            self.theme_dict['dialogBadgeBackground'] = self.accent.hex
+            self.theme_dict['dialogLineProgressBackground'] = white_5
+            self.theme_dict['dialogLineProgress'] = self.accent.hex
 
-        # buttons
-        self.theme_dict['dialogButton'] = self.accent.hex
+            # actionbar default
+            self.theme_dict['actionBarDefault'] = self.secondary.hex
+            self.theme_dict['actionBarDefaultIcon'] = white.hex
+            # menu
+            self.theme_dict['actionBarDefaultSubmenuBackground'] = dialogs_bg
 
-        # checkboxs
-        self.theme_dict['dialogCheckboxSquareBackground'] = white_2
-        self.theme_dict['dialogCheckboxSquareCheck'] = white.hex
-        self.theme_dict['dialogCheckboxSquareDisabled'] = white_2
-        self.theme_dict['dialogCheckboxSquareUnchecked'] = white_2
-        self.theme_dict['dialogRoundCheckBox'] = self.accent.hex
+            # buttons
+            self.theme_dict['dialogButton'] = self.accent.hex
 
-        # texts
-        self.theme_dict['windowBackgroundWhiteHintText'] = white_2
-        self.theme_dict['chats_menuItemText'] = white_2
-        self.theme_dict['actionBarDefaultSubmenuItem'] = white_2
-        self.theme_dict['dialogTextGray2'] = white_2
-        self.theme_dict['actionBarDefaultTitle'] = white_5
-        self.theme_dict['dialogTextBlack'] = white_5
-        self.theme_dict['dialogBadgeText'] = white_5
-        # optional link color?
-        self.theme_dict['dialogLinkSelection'] = self.accent.hex
+            # checkboxs
+            self.theme_dict['dialogCheckboxSquareBackground'] = white_2
+            self.theme_dict['dialogCheckboxSquareCheck'] = white.hex
+            self.theme_dict['dialogCheckboxSquareDisabled'] = white_2
+            self.theme_dict['dialogCheckboxSquareUnchecked'] = white_2
+            self.theme_dict['dialogRoundCheckBox'] = self.accent.hex
+
+            # texts
+            self.theme_dict['windowBackgroundWhiteHintText'] = white_2
+            self.theme_dict['chats_menuItemText'] = white_2
+            self.theme_dict['actionBarDefaultSubmenuItem'] = white_2
+            self.theme_dict['dialogTextGray2'] = white_2
+            self.theme_dict['actionBarDefaultTitle'] = white_5
+            self.theme_dict['dialogTextBlack'] = white_5
+            self.theme_dict['dialogBadgeText'] = white_5
+            # optional link color?
+            self.theme_dict['dialogLinkSelection'] = self.accent.hex
 
         os.mkdir('out', 0o755)
 
