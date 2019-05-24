@@ -421,7 +421,9 @@ class Themer:
             set('chat_addContact', self.accent)
             set('chat_replyPanelMessage', sec_text)
             set('chat_replyPanelIcons', self.accent)
+            set('chat_replyPanelName', self.accent)
             set('chat_searchPanelText', self.accent)
+            set('chat_searchPanelIcons', self.accent)
             set('chat_secretChatStatusText', msg_text)
             # chat_stickersHintPanel
             set('chat_unreadMessagesStartBackground', self.primary)
