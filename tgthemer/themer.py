@@ -285,7 +285,7 @@ class Themer:
             set('chat_outPreviewInstantText', self.accent)
             set('chat_outPreviewInstantSelectedText', self.accent)
             # chat_secretTimeText chat_stickerNameText chat_botProgress chat_mediaTimeBackground
-            set('chat_botButtonText', self.tertiary)
+            set('chat_botButtonText', self.accent.alpha(-0.25))
             set('chat_inForwardedNameText', self.accent.alpha(-0.25))
             set('chat_outForwardedNameText', self.accent.alpha(-0.15))
             set('chat_inViaBotNameText', self.accent.alpha(-0.25))
@@ -356,7 +356,7 @@ class Themer:
             set('chat_outVenueInfoText', self.accent.alpha(-0.15))
             set('chat_inVenueInfoSelectedText', self.accent.alpha(-0.25))
             set('chat_outVenueInfoSelectedText', self.accent.alpha(-0.15))
-            set('chat_linkSelectBackground', self.accent.alpha(-0.25))
+            set('chat_linkSelectBackground', self.accent.alpha(-0.75))
             set('chat_textSelectBackground', self.accent.alpha(-0.25))
             set('chat_messagePanelBackground', self.secondary)
             set('chat_inLoader', self.primary)
@@ -495,6 +495,13 @@ class Themer:
             set('stickers_menuSelector', pri_text.alpha(-0.7))
             set('key_changephoneinfo_changeText', self.accent)
             set('changephoneinfo_image', self.tertiary)
+            set('profile_creatorIcon', self.accent)
+            set('profile_verifiedBackground', self.accent)
+            set('windowBackgroundWhiteLinkSelection', self.accent.alpha(-0.75))
+            set('windowBackgroundWhiteBlueText', self.accent)
+            set('windowBackgroundWhiteBlueText2', self.accent)
+            set('windowBackgroundWhiteBlueButton', self.accent)
+            set('windowBackgroundWhiteBlueIcon', self.accent)
 
             if self.ttype == 'dark':
                 set('actionBarActionModeDefaultTop',
