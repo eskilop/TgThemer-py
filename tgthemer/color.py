@@ -1,8 +1,9 @@
+#!/usr/bin/env python3
 from math import ceil
 
 
 class Color:
-    # hex=None, rgba=(), s_int=0
+
     def __init__(self, hex=None, sint=None):
         if hex is not None and sint is None:
             self.color = hex

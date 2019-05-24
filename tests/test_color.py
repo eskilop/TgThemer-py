@@ -1,4 +1,4 @@
-from tgthemer.color import Color
+from tgthemer import Color
 
 
 class TestColor(object):

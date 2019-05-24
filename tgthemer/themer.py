@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from .color import Color
 import shutil
 import os
