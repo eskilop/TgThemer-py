@@ -158,7 +158,7 @@ class Themer:
             set('chats_messageArchived', msg_text)
             set('chats_actionMessage', msg_text)
             set('chats_date', msg_text)
-            set('chats_pinnedOverlay', acc_text.alpha(-0.75))
+            set('chats_pinnedOverlay', Color(hex="#FF000000").alpha(-0.75))
             # set('chats_tabletSelectedOverlay')
             set('chats_sentCheck', self.accent.alpha(-0.2))
             set('chats_sentClock', msg_text)

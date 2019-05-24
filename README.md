@@ -3,6 +3,9 @@
 ## Synopsis
 A telegram(for android) theme generator written in python (3.7)
 
+## Result samples
+You can find some generated themes examples on my telegram [channel](https://t.me/EskyThemes)
+
 ## Code example
 ```python
 from tgthemer import Themer
