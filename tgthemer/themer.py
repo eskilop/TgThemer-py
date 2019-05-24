@@ -2,25 +2,29 @@ from .color import Color
 import shutil
 import os
 
-std_none = "#000000"
+std_none = "#FF000000"
 
 
 class Themer:
 
     def __init__(self, primary=std_none, secondary=std_none, accent=std_none,
-                 mode="darken", ttype="dark"):
-        self.mode = mode
-        # todo: check secondary and tertiary even for clear themes!
+                 mode=None, ttype="dark"):
         self.primary = Color(hex=primary)
+        self.ttype = ttype
+        if mode is None:
+            self.mode = 'lighten' if self.ttype == 'dark' else 'darken'
+        else:
+            self.mode = mode
         if secondary == std_none:
             self.secondary = self.primary.lighten(0.5) \
                 if self.mode == 'lighten' \
                 else self.primary.lighten(-0.5)
         else:
             self.secondary = Color(hex=secondary)
-        self.tertiary = self.secondary.lighten(1)
+        self.tertiary = self.secondary.lighten(0.75) \
+            if self.mode == 'lighten' \
+            else self.secondary.lighten(-0.75)
         self.accent = Color(hex=accent)
-        self.ttype = ttype
 
         self.contents = ""
         self.theme_dict = {}
@@ -51,7 +55,7 @@ class Themer:
 
         if custom is not None:
             for k, v in custom.items():
-                setattr(self.theme_dict, k, v)
+                self.theme_dict[k] = v
         else:
 
             def set(key, color):
@@ -76,7 +80,6 @@ class Themer:
             set('actionBarDefaultSearchPlaceholder', sec_text.alpha(-0.8))
             set('actionBarActionModeDefaultIcon', sec_text.alpha(-0.1))
             set('actionBarActionModeDefault', self.secondary)
-            set('actionBarActionModeDefaultTop', self.secondary.lighten(0.25))
             set('actionBarActionModeDefaultSelector', acc_text.alpha(-0.8))
             set('divider', pri_text.alpha(-0.9))
             set('emptyListPlaceholder', pri_text.alpha(-0.8))
@@ -85,13 +88,9 @@ class Themer:
             set('chats_message', msg_text)
             set('chats_actionIcon', acc_icon)
             set('chats_actionBackground', self.accent)
-            set('chats_actionPressedBackground', self.accent.lighten(0.25))
             set('avatar_text', acc_icon)
             set('avatar_backgroundSaved', self.accent)
-            set('avatar_backgroundArchived', self.secondary.lighten(0.5))
-            set('avatar_backgroundArchivedHidden', self.secondary.lighten(0.25))
             set('chats_unreadCounter',  self.accent)
-            set('chats_unreadCounterMuted', self.secondary.lighten(0.5))
             set('chats_unreadCounterText', acc_icon)
             set('chats_name', title_text)
             set('chats_secretName', self.accent.alpha(-0.15))
@@ -114,29 +113,22 @@ class Themer:
             set('chats_verifiedBackground', self.accent.alpha(-0.2))
             set('chats_muteIcon', msg_text)
             set('chats_mentionIcon', acc_text)
-            set('chats_archivePinBackground', self.primary.lighten(0.5))
             set('chats_archiveBackground', self.accent)
             set('chats_archiveIcon', acc_text)
-            set('chats_menuBackground', self.primary.lighten(-0.25))
             set('chats_menuName', self.accent.alpha(-0.2))
             set('chats_menuPhone', info_text)
             # set('chats_menuPhoneCats', ) 'chats_menuCloudBackgroundCats',
             # chat_serviceBackground, chats_menuTopShadow
             set('avatar_backgroundActionBarBlue', self.secondary)
-            set('chats_menuItemIcon', self.tertiary.lighten(1))
             set('chats_menuItemText', msg_text)
             set('windowBackgroundWhiteGrayText3', info_text)
             set('windowBackgroundWhiteBlueText3', self.accent.alpha(-0.2))
             set('key_graySectionText', info_text)
-            set('graySection', self.primary.lighten(-0.25))
             set('windowBackgroundWhiteBlackText', msg_text)
             set('actionBarDefaultArchived', self.secondary)
             set('windowBackgroundGrayShadow', Color(hex='#FF000000'))
-            set('windowBackgroundGray', self.primary.lighten(-0.25))
             set('chats_archiveText', acc_text.alpha(-0.25))
             set('chats_onlineCircle', self.accent)
-            set('inappPlayerBackground', self.primary.lighten(0.15))
-            set('inappPlayerPlayPause', self.secondary.lighten(0.25))
             set('inAppPlayerTitle', msg_text)
             set('inappPlayerPerformer', msg_text)
             set('inappPlayerClose', pri_text)
@@ -147,7 +139,6 @@ class Themer:
             set('undo_infoColor', sec_text)
             set('dialogBackground', self.secondary)
             # set('dialogBackgroundGray')
-            set('dialogTextBlack', sec_text.lighten(-0.1))
             set('dialogTextLink', self.accent)
             set('dialogLinkSection', self.accent.alpha(-0.25))
             set('dialogTextBlue', self.accent)
@@ -167,13 +158,11 @@ class Themer:
             set('dialogCheckboxSquareBackground', self.accent)
             set('dialogCheckboxSquareCheck', acc_text)
             set('dialogCheckboxSquareUnchecked', self.primary)
-            set('dialogCheckboxSquareDisabled', self.primary.lighten(-0.1))
             set('dialogRadioBackground', self.primary)
             set('dialogRadioBackgroundChecked', self.accent)
             set('dialogProgressCircle', self.accent)
             set('dialogButton', self.accent)
             set('dialogButtonSelector', acc_text.alpha(-0.8))
-            set('dialogScrollGlow', sec_text.lighten(0.25))
             set('dialogRoundCheckBox', self.accent)
             set('dialogRoundCheckBoxCheck', acc_text)
             set('dialogBadgeBackground', self.accent)
@@ -190,7 +179,6 @@ class Themer:
             set('player_actionBar', self.secondary)
             set('player_actionBarSelecto', self.secondary.alpha(-0.7))
             set('player_actionBarTitle', sec_text)
-            set('player_actionBarTop', self.secondary.lighten(0.5))
             set('player_actionBarSubtitle', sec_text)
             set('player_actionBarItems', sec_text.alpha(-0.1))
             set('player_background', self.primary)
@@ -203,37 +191,23 @@ class Themer:
             set('player_button', pri_text.alpha(-0.1))
             set('player_buttonActive', self.accent)
 
-            set('chat_wallpaper', self.primary.lighten(-0.25))
-            set('actionBarDefaultSubmenuBackground',
-                self.secondary.lighten(-0.25))
             set('actionBarDefaultSubmenuItem', sec_text)
-            set('actionBarDefaultSubmenuItemIcon', self.tertiary.lighten(1))
             set('actionBarDefaultSubtitle', sec_text)
             set('chat_muteIcon', sec_text)
             set('chat_lockIcon', self.accent)
             set('chat_inBubble', self.secondary)
-            set('chat_inBubbleSelected', self.secondary.lighten(0.25))
-            set('chat_inBubbleShadow', self.secondary.lighten(-0.25))
             set('chat_outBubble', self.tertiary)
             set('chat_outBubbleSelected', self.tertiary)
-            set('chat_outBubbleShadow', self.tertiary.lighten(-0.25))
             set('chat_serviceText', pri_text)
             set('chat_serviceLink', self.accent.alpha(-0.25))
             set('chat_serviceIcon', self.tertiary)
             set('chat_serviceBackground', self.primary)
-            set('chat_serviceBackgroundSelected', self.primary.lighten(0.25))
             set('chat_messageTextIn', sec_text.alpha(-0.15))
             set('chat_messageTextOut', ter_text)
             set('chat_messageLinkIn', self.accent)
-            set('chat_messageLinkOut', self.accent.lighten(0.25))
             set('chat_mediaTimeText', info_text)
             set('chat_outSentCheck', self.accent)
             set('chat_outSentCheckSelected', self.accent)
-            set('chat_outSentClock', self.accent.lighten(0.2))
-            set('chat_inSentCheck', self.accent.lighten(-0.3))
-            set('chat_inSentClock', self.accent.lighten(-0.2))
-            set('chat_inSentClockSelected', self.accent.lighten(-0.2))
-            set('chat_outSentClockSelected', self.accent.lighten(0.1))
             set('chat_mediaSentCheck', msg_text)
             set('chat_mediaSentClock', msg_text)
             set('chat_outViews', self.accent.alpha(-0.6))
@@ -247,7 +221,6 @@ class Themer:
             set('chat_inMenuSelected', sec_text.alpha(-0.3))
             # set('chat_mediaMenu',)
             set('chat_outInstant', self.accent)
-            set('chat_outInstantSelected', self.accent.lighten(0.2))
             set('chat_inInstant', self.accent)
             set('chat_inInstantSelected', self.accent.alpha(-0.2))
             # calls_callReceivedRedIcon calls_callReceivedGreenIcon chat_SentError
@@ -255,11 +228,10 @@ class Themer:
             set('chat_selectedBackground', self.secondary.alpha(-0.6))
             set('chat_previewDurationText', info_text)
             set('chat_previewGameText', info_text)
-            set('chat_inPreviewInstantText', self.accent.lighten(0.2))
-            set('chat_inPreviewInstantSelectedText', self.accent.lighten(0.2))
             set('chat_outPreviewInstantText', self.accent)
             set('chat_outPreviewInstantSelectedText', self.accent)
-            # chat_secretTimeText chat_stickerNameText chat_botButtonText chat_botProgress chat_mediaTimeBackground
+            # chat_secretTimeText chat_stickerNameText chat_botProgress chat_mediaTimeBackground
+            set('chat_botButtonText', self.tertiary)
             set('chat_inForwardedNameText', self.accent.alpha(-0.25))
             set('chat_outForwardedNameText', self.accent.alpha(-0.15))
             set('chat_inViaBotNameText', self.accent.alpha(-0.25))
@@ -276,6 +248,8 @@ class Themer:
             set('chat_outReplyMediaMessageSelectedText', self.accent.alpha(-0.15))
             set('chat_inPreviewLine', self.accent.alpha(-0.25))
             set('chat_outPreviewLine', self.accent.alpha(-0.15))
+            set('chat_inContactNameText', self.accent.alpha(-0.25))
+            set('chat_outContactNameText', self.accent.alpha(-0.5))
             set('chat_inSiteNameText', self.accent.alpha(-0.25))
             set('chat_outSiteNameText', self.accent.alpha(-0.15))
             set('chat_inContactPhoneText', self.accent.alpha(-0.25))
@@ -283,10 +257,10 @@ class Themer:
             set('chat_inContactPhoneSelectedText', self.accent.alpha(-0.25))
             set('chat_outContactPhoneSelectedText', self.accent.alpha(-0.15))
             set('chat_mediaProgress ', msg_text)
-            set('chat_inAudioProgress', msg_text)
-            set('chat_outAudioProgress', msg_text)
-            set('chat_inAudioSelectedProgress', msg_text)
-            set('chat_outAudioSelectedProgress', msg_text)
+            set('chat_inAudioProgress', sec_text)
+            set('chat_outAudioProgress', ter_text)
+            set('chat_inAudioSelectedProgress', sec_text)
+            set('chat_outAudioSelectedProgress', ter_text)
             set('chat_inTimeText', sec_text)
             set('chat_outTimeText', ter_text)
             set('chat_inTimeSelectedText', sec_text.alpha(-0.1))
@@ -298,8 +272,8 @@ class Themer:
             set('chat_outAudioPerfomerText', self.accent.alpha(-0.25))
             set('chat_inAudioPerfomerSelectedText', self.accent.alpha(-0.25))
             set('chat_outAudioPerfomerSelectedText', self.accent.alpha(-0.25))
-            set('chat_inAudioTitleText', msg_text)
-            set('chat_outAudioTitleText', msg_text)
+            set('chat_inAudioTitleText', sec_text)
+            set('chat_outAudioTitleText', ter_text)
             set('chat_inAudioDurationText', ter_text.alpha(-0.25))
             set('chat_outAudioDurationText', sec_text.alpha(-0.25))
             set('chat_inAudioDurationSelectedText', ter_text.alpha(-0.25))
@@ -318,18 +292,12 @@ class Themer:
             set('chat_outVoiceSeekbarSelected', self.secondary)
             set('chat_inVoiceSeekbarFill', self.accent.alpha(-0.25))
             set('chat_outVoiceSeekbarFill', self.accent.alpha(-0.25))
-            set('chat_inFileProgress', self.accent.lighten(-0.25))
-            set('chat_outFileProgress', self.accent.lighten(-0.15))
-            set('chat_inFileProgressSelected', self.accent.lighten(-0.15))
-            set('chat_outFileProgressSelected', self.accent.lighten(-0.05))
-            set('chat_inFileInfoText', self.accent.alpha(-0.25))
-            set('chat_outFileInfoText', self.accent.alpha(-0.15))
-            set('chat_inFileInfoSelectedText', self.accent.alpha(-0.25))
-            set('chat_outFileInfoSelectedText', self.accent.alpha(-0.15))
-            set('chat_inFileBackground', self.accent.lighten(-0.5))
-            set('chat_outFileBackground', self.accent.lighten(0.5))
-            set('chat_inFileBackgroundSelected', self.accent.lighten(-0.5))
-            set('chat_outFileBackgroundSelected', self.accent.lighten(0.5))
+            set('chat_inFileNameText', sec_text)
+            set('chat_outFileNameText', ter_text)
+            set('chat_inFileInfoText', sec_text)
+            set('chat_outFileInfoText', ter_text)
+            set('chat_inFileInfoSelectedText', sec_text)
+            set('chat_outFileInfoSelectedText', ter_text)
             set('chat_inVenueInfoText', self.accent.alpha(-0.25))
             set('chat_outVenueInfoText', self.accent.alpha(-0.15))
             set('chat_inVenueInfoSelectedText', self.accent.alpha(-0.25))
@@ -341,34 +309,34 @@ class Themer:
             set('chat_outLoader', self.secondary)
             set('chat_inLoaderSelected', self.primary)
             set('chat_outLoaderSelected', self.secondary)
-            set('chat_inMediaIcon', self.accent.alpha(-0.25))
-            set('chat_outMediaIcon', self.accent.alpha(-0.25))
-            set('chat_inMediaIconSelected', self.accent.alpha(-0.25))
-            set('chat_outMediaIconSelected', self.accent.alpha(-0.25))
+            set('chat_inMediaIcon', self.accent)
+            set('chat_outMediaIcon', self.accent)
+            set('chat_inMediaIconSelected', self.accent)
+            set('chat_outMediaIconSelected', self.accent)
             set('chat_mediaLoaderPhoto', self.primary)
-            set('chat_mediaLoaderPhotoIcon', self.accent.alpha(-0.25))
+            set('chat_mediaLoaderPhotoIcon', self.accent)
             set('chat_mediaLoaderPhotoSelected', self.primary)
-            set('chat_mediaLoaderPhotoIconSelected', self.accent.alpha(-0.25))
+            set('chat_mediaLoaderPhotoIconSelected', self.accent)
             set('chat_outLoaderPhoto', self.secondary)
             set('chat_outLoaderPhotoSelected', self.secondary)
-            set('chat_outLoaderPhotoIcon', self.accent.alpha(-0.25))
-            set('chat_outLoaderPhotoIconSelected', self.accent.alpha(-0.25))
+            set('chat_outLoaderPhotoIcon', self.accent)
+            set('chat_outLoaderPhotoIconSelected', self.accent)
             set('chat_inLoaderPhoto', self.primary)
             set('chat_inLoaderPhotoSelected', self.primary)
-            set('chat_inLoaderPhotoIcon', self.accent.alpha(-0.25))
-            set('chat_inLoaderPhotoIconSelected', self.accent.alpha(-0.25))
-            set('chat_outFileIcon', self.accent.alpha(-0.25))
-            set('chat_outFileSelectedIcon', self.accent.alpha(-0.25))
-            set('chat_inFileIcon', self.accent.alpha(-0.25))
-            set('chat_inFileSelectedIcon', self.accent.alpha(-0.25))
+            set('chat_inLoaderPhotoIcon', self.accent)
+            set('chat_inLoaderPhotoIconSelected', self.accent)
+            set('chat_outFileIcon', self.accent)
+            set('chat_outFileSelectedIcon', self.accent)
+            set('chat_inFileIcon', self.accent)
+            set('chat_inFileSelectedIcon', self.accent)
             set('chat_inContactBackground', self.primary)
             set('chat_outContactBackground', self.secondary)
-            set('chat_inContactIcon', self.accent.alpha(-0.25))
-            set('chat_outContactIcon', self.accent.alpha(-0.25))
+            set('chat_inContactIcon', self.accent)
+            set('chat_outContactIcon', self.accent)
             set('chat_inLocationBackground', self.primary)
             set('chat_outLocationBackground', self.secondary)
-            set('chat_inLocationIcon', self.accent.alpha(-0.25))
-            set('chat_outLocationIcon', self.accent.alpha(-0.25))
+            set('chat_inLocationIcon', self.accent)
+            set('chat_outLocationIcon', self.accent)
             # chat_messagePanelShadow' default ok
             set('chat_fieldOverlayText', self.accent)
             set('chat_messagePanelText', pri_text)
@@ -412,12 +380,9 @@ class Themer:
             set('chat_emojiPanelStickerPackSelectorLine', self.accent)
             set('chatbotKeyboardButtonText', self.secondary.alpha(-0.25))
             set('chatbotKeyboardButtonBackground', self.secondary)
-            set('chatbotKeyboardButtonBackgroundPressed',
-                self.secondary.lighten(0.1).alpha(-0.7))
             set('chat_topPanelLine', self.accent)
             set('chat_topPanelTitle', self.accent)
             set('chat_topPanelMessage', sec_text)
-            set('chat_topPanelBackground', self.secondary.lighten(-0.2))
             set('chat_addContact', self.accent)
             set('chat_replyPanelMessage', sec_text)
             set('chat_replyPanelIcons', self.accent)
@@ -427,11 +392,9 @@ class Themer:
             set('chat_secretChatStatusText', msg_text)
             # chat_stickersHintPanel
             set('chat_unreadMessagesStartBackground', self.primary)
-            set('chat_unreadMessagesStartArrowIcon',
-                self.primary.lighten(0.75).alpha(-0.2))
             set('chat_unreadMessagesStartText', msg_text)
             set('chat_botSwitchToInlineText', self.accent.alpha(-0.25))
-            set('chat_inlineResultIcon', self.accent.alpha(-0.25))
+            set('chat_inlineResultIcon', self.accent)
             set('windowBackgroundWhiteGrayText2', info_text)
             set('windowBackgroundWhiteLinkText', self.accent.alpha(-0.25))
             set('chat_gifSaveHintBackground', self.primary)
@@ -453,7 +416,6 @@ class Themer:
             set('chat_attachSendBackground', self.accent)
             set('chat_attachSendIcon', acc_icon)
             # dialogCameraIcon ok
-
             set('avatar_actionBarIconBlue', sec_text)
             set('avatar_actionBarSelectorBlue', self.secondary.alpha(-0.8))
             set('profile_title', sec_text.alpha(-0.1))
@@ -461,7 +423,6 @@ class Themer:
             set('actionBarDefaultSubmenuItem', sec_text.alpha(-0.25))
             set('listSelectorSDK21', self.secondary.alpha(-0.8))
             set('windowBackgroundWhiteValueText', self.accent)
-            set('windowBackgroundWhiteGrayIcon', self.tertiary.lighten(1))
             set('windowBackgroundWhiteBlueHeader', self.accent)
             set('avatar_backgroundInProfileBlue', self.accent)
             set('profile_actionIcon', acc_icon)
@@ -481,6 +442,110 @@ class Themer:
             set('key_changephoneinfo_changeText', self.accent)
             set('changephoneinfo_image', self.tertiary)
 
+            if self.ttype == 'dark':
+                set('actionBarActionModeDefaultTop',
+                    self.secondary.lighten(0.25))
+                set('chats_actionPressedBackground', self.accent.lighten(0.25))
+                set('avatar_backgroundArchived', self.secondary.lighten(0.5))
+                set('avatar_backgroundArchivedHidden',
+                    self.secondary.lighten(0.25))
+                set('chats_unreadCounterMuted', self.secondary.lighten(0.5))
+                set('chats_archivePinBackground', self.primary.lighten(0.5))
+                set('chats_menuBackground', self.primary.lighten(-0.25))
+                set('chats_menuItemIcon', self.tertiary.lighten(1))
+                set('graySection', self.primary.lighten(-0.25))
+                set('windowBackgroundGray', self.primary.lighten(-0.25))
+                set('inappPlayerBackground', self.primary.lighten(0.15))
+                set('inappPlayerPlayPause', self.secondary.lighten(0.25))
+                set('dialogTextBlack', sec_text.lighten(-0.1))
+                set('dialogCheckboxSquareDisabled', self.primary.lighten(-0.1))
+                set('dialogScrollGlow', sec_text.lighten(0.25))
+                set('player_actionBarTop', self.secondary.lighten(0.5))
+                set('chat_wallpaper', self.primary.lighten(-0.25))
+                set('actionBarDefaultSubmenuBackground',
+                    self.secondary.lighten(-0.25))
+                set('actionBarDefaultSubmenuItemIcon', self.tertiary.lighten(1))
+                set('chat_inBubbleSelected', self.secondary.lighten(0.25))
+                set('chat_inBubbleShadow', self.secondary.lighten(-0.25))
+                set('chat_outBubbleShadow', self.tertiary.lighten(-0.25))
+                set('chat_serviceBackgroundSelected', self.primary.lighten(0.25))
+                set('chat_messageLinkOut', self.accent.lighten(0.25))
+                set('chat_outSentClock', self.accent.lighten(0.2))
+                set('chat_inSentCheck', self.accent.lighten(-0.3))
+                set('chat_inSentClock', self.accent.lighten(-0.2))
+                set('chat_inSentClockSelected', self.accent.lighten(-0.2))
+                set('chat_outSentClockSelected', self.accent.lighten(0.1))
+                set('chat_outInstantSelected', self.accent.lighten(0.2))
+                set('chat_inPreviewInstantText', self.accent.lighten(0.2))
+                set('chat_inPreviewInstantSelectedText', self.accent.lighten(0.2))
+                set('chat_inFileProgress', self.accent.lighten(-0.25))
+                set('chat_outFileProgress', self.accent.lighten(-0.15))
+                set('chat_inFileProgressSelected', self.accent.lighten(-0.15))
+                set('chat_outFileProgressSelected', self.accent.lighten(-0.05))
+                set('chat_inFileBackground', self.accent.lighten(-0.5))
+                set('chat_outFileBackground', self.accent.lighten(0.5))
+                set('chat_inFileBackgroundSelected', self.accent.lighten(-0.5))
+                set('chat_outFileBackgroundSelected', self.accent.lighten(0.5))
+                set('chatbotKeyboardButtonBackgroundPressed',
+                    self.secondary.lighten(0.1).alpha(-0.7))
+                set('chat_topPanelBackground', self.secondary.lighten(-0.2))
+                set('chat_unreadMessagesStartArrowIcon',
+                    self.primary.lighten(0.75).alpha(-0.2))
+                set('windowBackgroundWhiteGrayIcon', self.tertiary.lighten(1))
+
+            elif self.ttype == 'light':
+                set('actionBarActionModeDefaultTop',
+                    self.secondary.lighten(-0.25))
+                set('chats_actionPressedBackground', self.accent.lighten(-0.25))
+                set('avatar_backgroundArchived', self.secondary.lighten(-0.5))
+                set('avatar_backgroundArchivedHidden',
+                    self.secondary.lighten(-0.25))
+                set('chats_unreadCounterMuted', self.secondary.lighten(-0.5))
+                set('chats_archivePinBackground', self.primary.lighten(-5))
+                set('chats_menuBackground', self.primary.lighten(-0.25))
+                set('chats_menuItemIcon', self.tertiary.lighten(-1))
+                set('graySection', self.primary.lighten(0.25))
+                set('windowBackgroundGray', self.primary.lighten(-0.25))
+                set('inappPlayerBackground', self.primary.lighten(-0.15))
+                set('inappPlayerPlayPause', self.secondary.lighten(-0.25))
+                set('dialogTextBlack', sec_text.lighten(0.1))
+                set('dialogCheckboxSquareDisabled', self.primary.lighten(0.1))
+                set('dialogScrollGlow', sec_text.lighten(-0.25))
+                set('player_actionBarTop', self.secondary.lighten(-0.5))
+                set('chat_wallpaper', self.primary.lighten(-0.25))
+                set('actionBarDefaultSubmenuBackground',
+                    self.secondary.lighten(0.25))
+                set('actionBarDefaultSubmenuItemIcon', self.tertiary.lighten(-1))
+                set('chat_inBubbleSelected', self.secondary.lighten(-0.25))
+                set('chat_inBubbleShadow', self.secondary.lighten(0.25))
+                set('chat_outBubbleShadow', self.tertiary.lighten(0.25))
+                set('chat_serviceBackgroundSelected',
+                    self.primary.lighten(-0.25))
+                set('chat_messageLinkOut', self.accent.lighten(-0.25))
+                set('chat_outSentClock', self.accent.lighten(-0.2))
+                set('chat_inSentCheck', self.accent.lighten(0.3))
+                set('chat_inSentClock', self.accent.lighten(0.2))
+                set('chat_inSentClockSelected', self.accent.lighten(0.2))
+                set('chat_outSentClockSelected', self.accent.lighten(-0.1))
+                set('chat_outInstantSelected', self.accent.lighten(-0.2))
+                set('chat_inPreviewInstantText', self.accent.lighten(-0.2))
+                set('chat_inPreviewInstantSelectedText',
+                    self.accent.lighten(-0.2))
+                set('chat_inFileProgress', self.accent.lighten(0.25))
+                set('chat_outFileProgress', self.accent.lighten(0.15))
+                set('chat_inFileProgressSelected', self.accent.lighten(0.15))
+                set('chat_outFileProgressSelected', self.accent.lighten(0.05))
+                set('chat_inFileBackground', self.accent.lighten(0.5))
+                set('chat_outFileBackground', self.accent.lighten(-0.5))
+                set('chat_inFileBackgroundSelected', self.accent.lighten(0.5))
+                set('chat_outFileBackgroundSelected', self.accent.lighten(-0.5))
+                set('chatbotKeyboardButtonBackgroundPressed',
+                    self.secondary.lighten(-0.1).alpha(-0.7))
+                set('chat_topPanelBackground', self.secondary.lighten(0.2))
+                set('chat_unreadMessagesStartArrowIcon',
+                    self.primary.lighten(-0.75).alpha(-0.2))
+                set('windowBackgroundWhiteGrayIcon', self.tertiary.lighten(-1))
+
         if out is None:
             self.to_file(self.telegram_string, 'out/android')
         else:
@@ -492,6 +557,8 @@ class Themer:
             return Color(hex='#FF000000')
         elif color.argb < mid.argb:
             return Color(hex='#FFFFFFFF')
+        else:  # either one will go
+            return Color(hex='#FF000000')
 
     def _to_string(self, content_dict):
         result = ""
