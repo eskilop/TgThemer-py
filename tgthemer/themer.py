@@ -33,17 +33,70 @@ class Themer:
         if not os.path.exists("out"):
             os.mkdir('out', 0o755)
 
-    def read_file(self, inputfile):
+    def _read_file(self, inputfile):
         source = open(inputfile+'.attheme', 'r')
         contents = source.read()
         source.close()
         self.contents = contents
         self.theme_dict = self._to_dict()
 
-    def to_file(self, contents, outfile):
+    def _to_file(self, contents, outfile):
         result = open(outfile+'.attheme', 'w')
         result.write(contents)
         result.close()
+
+    def _accent_text(self, color):
+        mid = Color(hex="#FF808080")
+        if color.argb > mid.argb:
+            return Color(hex='#FF000000')
+        elif color.argb < mid.argb:
+            return Color(hex='#FFFFFFFF')
+        else:  # either one will go
+            return Color(hex='#FF000000')
+
+    def _to_string(self, content_dict):
+        result = ""
+        for k, v in content_dict.items():
+            result += "{}={}\n".format(k, v)
+        return result
+
+    def _to_dict(self):
+        result_dict = {}
+        pairs = self.contents.split('\n')
+        for pair in pairs:
+            if pair != '':
+                kvpair = pair.split('=')
+                result_dict[kvpair[0]] = kvpair[1]
+        return result_dict
+
+    def _transform_dict(self, fn):
+        result = {}
+        for k, v in self.theme_dict.items():
+            result[k] = fn(v)
+        return result
+
+    def clear(self):
+        shutil.rmtree('out', ignore_errors=True)
+
+    @property
+    def human_dict(self):
+        return self._transform_dict(
+            lambda x: Color(sint=int(x)).hex
+        )
+
+    @property
+    def telegram_dict(self):
+        return self._transform_dict(
+            lambda x: Color(hex=x).sint
+        )
+
+    @property
+    def telegram_string(self):
+        return self._to_string(self.telegram_dict)
+
+    @property
+    def human_string(self):
+        return self._to_string(self.human_dict)
 
     def generate_android(self, custom=None, out=None):
 
@@ -51,7 +104,7 @@ class Themer:
             if self.ttype == 'dark' \
             else "sources/android/source_light"
 
-        contents = self.read_file(source)
+        contents = self._read_file(source)
         self.theme_dict = self.human_dict
 
         if custom is not None:
@@ -548,59 +601,6 @@ class Themer:
                 set('windowBackgroundWhiteGrayIcon', self.tertiary.lighten(-1))
 
         if out is None:
-            self.to_file(self.telegram_string, 'out/android')
+            self._to_file(self.telegram_string, 'out/android')
         else:
-            self.to_file(self.telegram_string, 'out/'+out)
-
-    def _accent_text(self, color):
-        mid = Color(hex="#FF808080")
-        if color.argb > mid.argb:
-            return Color(hex='#FF000000')
-        elif color.argb < mid.argb:
-            return Color(hex='#FFFFFFFF')
-        else:  # either one will go
-            return Color(hex='#FF000000')
-
-    def _to_string(self, content_dict):
-        result = ""
-        for k, v in content_dict.items():
-            result += "{}={}\n".format(k, v)
-        return result
-
-    def _to_dict(self):
-        result_dict = {}
-        pairs = self.contents.split('\n')
-        for pair in pairs:
-            if pair != '':
-                kvpair = pair.split('=')
-                result_dict[kvpair[0]] = kvpair[1]
-        return result_dict
-
-    def _transform_dict(self, fn):
-        result = {}
-        for k, v in self.theme_dict.items():
-            result[k] = fn(v)
-        return result
-
-    def clear(self):
-        shutil.rmtree('out', ignore_errors=True)
-
-    @property
-    def human_dict(self):
-        return self._transform_dict(
-            lambda x: Color(sint=int(x)).hex
-        )
-
-    @property
-    def telegram_dict(self):
-        return self._transform_dict(
-            lambda x: Color(hex=x).sint
-        )
-
-    @property
-    def telegram_string(self):
-        return self._to_string(self.telegram_dict)
-
-    @property
-    def human_string(self):
-        return self._to_string(self.human_dict)
+            self._to_file(self.telegram_string, 'out/'+out)

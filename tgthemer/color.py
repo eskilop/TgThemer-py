@@ -5,13 +5,14 @@ from math import ceil
 class Color:
 
     def __init__(self, hex=None, sint=None):
-        if hex is not None and sint is None:
+        if hex is None and sint is None:
+            raise ValueError("No color specified")
+        elif hex is not None and sint is None:
             self.color = hex
         elif sint is not None and hex is None:
             self.color = sint
         else:
-            pass  # debug purposes
-            # raise ValueError("You must specify a color.")
+            self.color = hex
 
     @property
     def sint(self):
