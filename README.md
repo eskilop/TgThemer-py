@@ -1,3 +1,5 @@
+<img src="https://gitlab.com/uploads/-/system/project/avatar/12442001/tgthemer_round.png" width="200px">
+
 ## Synopsis
 A telegram(for android) theme generator written in python (3.7)
 
@@ -7,7 +9,7 @@ from tgthemer import Themer
 
 themer = Themer(primary='#FF18181F',  # theme primary colour
                 accent='#FFFFF58F',   # theme accent colour
-                ttype='dark')         # theme type
+                ttype='dark')         # theme type
 
 themer.generate_android(out="my_fab_theme")
 ```
