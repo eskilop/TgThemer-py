@@ -25,6 +25,9 @@ class Themer:
         self.contents = ""
         self.theme_dict = {}
 
+        if not os.path.exists("out"):
+            os.mkdir('out', 0o755)
+
     def read_file(self, inputfile):
         source = open(inputfile+'.attheme', 'r')
         contents = source.read()
@@ -37,8 +40,7 @@ class Themer:
         result.write(contents)
         result.close()
 
-    def generate_android(self, custom=None):
-        shutil.rmtree('out', ignore_errors=True)
+    def generate_android(self, custom=None, out=None):
 
         source = "sources/android/source_dark" \
             if self.ttype == 'dark' \
@@ -121,7 +123,7 @@ class Themer:
             # set('chats_menuPhoneCats', ) 'chats_menuCloudBackgroundCats',
             # chat_serviceBackground, chats_menuTopShadow
             set('avatar_backgroundActionBarBlue', self.secondary)
-            set('chats_menuItemIcon', self.secondary.lighten(1))
+            set('chats_menuItemIcon', self.tertiary.lighten(1))
             set('chats_menuItemText', msg_text)
             set('windowBackgroundWhiteGrayText3', info_text)
             set('windowBackgroundWhiteBlueText3', self.accent.alpha(-0.2))
@@ -205,7 +207,7 @@ class Themer:
             set('actionBarDefaultSubmenuBackground',
                 self.secondary.lighten(-0.25))
             set('actionBarDefaultSubmenuItem', sec_text)
-            set('actionBarDefaultSubmenuItemIcon', self.tertiary)
+            set('actionBarDefaultSubmenuItemIcon', self.tertiary.lighten(1))
             set('actionBarDefaultSubtitle', sec_text)
             set('chat_muteIcon', sec_text)
             set('chat_lockIcon', self.accent)
@@ -230,6 +232,7 @@ class Themer:
             set('chat_outSentClock', self.accent.lighten(0.2))
             set('chat_inSentCheck', self.accent.lighten(-0.3))
             set('chat_inSentClock', self.accent.lighten(-0.2))
+            set('chat_inSentClockSelected', self.accent.lighten(-0.2))
             set('chat_outSentClockSelected', self.accent.lighten(0.1))
             set('chat_mediaSentCheck', msg_text)
             set('chat_mediaSentClock', msg_text)
@@ -456,16 +459,30 @@ class Themer:
             set('actionBarDefaultSubmenuItem', sec_text.alpha(-0.25))
             set('listSelectorSDK21', self.secondary.alpha(-0.8))
             set('windowBackgroundWhiteValueText', self.accent)
-            set('windowBackgroundwhiteGrayIcon', self.tertiary)
+            set('windowBackgroundWhiteGrayIcon', self.tertiary.lighten(1))
             set('windowBackgroundWhiteBlueHeader', self.accent)
             set('avatar_backgroundInProfileBlue', self.accent)
             set('profile_actionIcon', acc_icon)
             set('profile_actionBackground', self.accent)
             set('profile_actionPressedBackground', self.accent.alpha(-0.25))
 
-        os.mkdir('out', 0o755)
+            set('switchTrack', self.tertiary)
+            set('switchTrackChecked', self.accent)
+            set('radioBackground', self.primary)
+            set('radioBackgroundChecked', self.accent)
+            set('windowBackgroundWhiteInputField', self.secondary)
+            set('windowBackgroundWhiteInputFieldActivated', self.accent)
+            set('windowBackgroundWhiteBlueText4', self.accent)
+            set('featuredStickers_addedIcon', self.accent)
+            set('stickers_menu', pri_text.alpha(-0.5))
+            set('stickers_menuSelector', pri_text.alpha(-0.7))
+            set('key_changephoneinfo_changeText', self.accent)
+            set('changephoneinfo_image', self.tertiary)
 
-        self.to_file(self.telegram_string, 'out/android')
+        if out is None:
+            self.to_file(self.telegram_string, 'out/android')
+        else:
+            self.to_file(self.telegram_string, 'out/'+out)
 
     def _accent_text(self, color):
         mid = Color(hex="#FF808080")
@@ -494,6 +511,9 @@ class Themer:
         for k, v in self.theme_dict.items():
             result[k] = fn(v)
         return result
+
+    def clear(self):
+        shutil.rmtree('out', ignore_errors=True)
 
     @property
     def human_dict(self):
