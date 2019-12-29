@@ -4,20 +4,19 @@ from math import ceil
 
 class Color:
 
-    def __init__(self, hex=None, sint=None):
+    def __init__(self, color=None):
         self.is24b = False
-        if hex is None and sint is None:
+
+        if color is None:
             raise ValueError("No color specified")
-        elif hex is not None and sint is None:
-            self.color = hex
-            if len(hex[1:]) == 6:
+        elif type(color) == str:
+            if len(color[1:]) == 6:
                 self.is24b = True
-        elif sint is not None and hex is None:
-            self.color = sint
-            if (sint & -16777216) == 0:
+        elif type(color) == int:
+            if (color & -16777216) == 0:
                 self.is24b = True
-        else:
-            self.color = hex
+        
+        self.color = color
 
     @property
     def sint(self):
@@ -90,7 +89,7 @@ class Color:
                         int(initial_alpha, 16) +
                         (int(initial_alpha, 16) * percent)
                     )))
-        return Color(hex=(new_alpha).replace('0x', '#').upper() + self.hex[3:])
+        return Color((new_alpha).replace('0x', '#').upper() + self.hex[3:])
 
     def __repr__(self):
         return "{}".format(self.hex)

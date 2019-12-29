@@ -10,7 +10,7 @@ class Themer:
 
     def __init__(self, primary=std_none, secondary=std_none, accent=std_none,
                  mode=None, ttype="dark"):
-        self.primary = Color(hex=primary)
+        self.primary = Color(primary)
         self.ttype = ttype
         if mode is None:
             self.mode = 'lighten' if self.ttype == 'dark' else 'darken'
@@ -21,11 +21,11 @@ class Themer:
                 if self.mode == 'lighten' \
                 else self.primary.lighten(-0.5)
         else:
-            self.secondary = Color(hex=secondary)
+            self.secondary = Color(secondary)
         self.tertiary = self.secondary.lighten(0.75) \
             if self.mode == 'lighten' \
             else self.secondary.lighten(-0.75)
-        self.accent = Color(hex=accent)
+        self.accent = Color(accent)
 
         self.contents = ""
         self.theme_dict = {}
@@ -46,13 +46,13 @@ class Themer:
         result.close()
 
     def _accent_text(self, color):
-        mid = Color(hex="#FF808080")
+        mid = Color("#FF808080")
         if color.argb > mid.argb:
-            return Color(hex='#FF000000')
+            return Color('#FF000000')
         elif color.argb < mid.argb:
-            return Color(hex='#FFFFFFFF')
+            return Color('#FFFFFFFF')
         else:  # either one will go
-            return Color(hex='#FF000000')
+            return Color('#FF000000')
 
     def _to_string(self, content_dict):
         result = ""
@@ -81,13 +81,13 @@ class Themer:
     @property
     def human_dict(self):
         return self._transform_dict(
-            lambda x: Color(sint=int(x)).hex
+            lambda x: Color(int(x)).hex
         )
 
     @property
     def telegram_dict(self):
         return self._transform_dict(
-            lambda x: Color(hex=x).sint
+            lambda x: Color(x).sint
         )
 
     @property
@@ -104,7 +104,7 @@ class Themer:
             if self.ttype == 'dark' \
             else "sources/android/source_light"
 
-        contents = self._read_file(source)
+        self._read_file(source)
         self.theme_dict = self.human_dict
 
         if custom is not None:
@@ -158,7 +158,7 @@ class Themer:
             set('chats_messageArchived', msg_text)
             set('chats_actionMessage', msg_text)
             set('chats_date', msg_text)
-            set('chats_pinnedOverlay', Color(hex="#FF000000").alpha(-0.75))
+            set('chats_pinnedOverlay', Color("#FF000000").alpha(-0.75))
             # set('chats_tabletSelectedOverlay')
             set('chats_sentCheck', self.accent.alpha(-0.2))
             set('chats_sentClock', msg_text)
@@ -180,7 +180,7 @@ class Themer:
             set('key_graySectionText', info_text)
             set('windowBackgroundWhiteBlackText', msg_text)
             set('actionBarDefaultArchived', self.secondary)
-            set('windowBackgroundGrayShadow', Color(hex='#FF000000'))
+            set('windowBackgroundGrayShadow', Color('#FF000000'))
             set('chats_archiveText', acc_text.alpha(-0.25))
             set('chats_onlineCircle', self.accent)
             set('inAppPlayerTitle', msg_text)

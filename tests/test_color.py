@@ -19,36 +19,36 @@ colorgroup24 = {
 class TestColor(object):
 
     def test_hex_prop(self):
-        assert Color(hex=colorgroup["base"]).hex == colorgroup["base"]
+        assert Color(colorgroup["base"]).hex == colorgroup["base"]
 
     def test_sint_prop(self):
-        assert Color(hex=colorgroup["base"]).sint == colorgroup["s_int"]
+        assert Color(colorgroup["base"]).sint == colorgroup["s_int"]
 
     def test_argb_prop(self):
-        assert Color(hex=colorgroup["base"]).argb == colorgroup["argb"]
+        assert Color(colorgroup["base"]).argb == colorgroup["argb"]
 
     def test_alpha(self):
-        assert Color(hex=colorgroup["base"]).alpha(-0.5).hex == "#8018181F"
+        assert Color(colorgroup["base"]).alpha(-0.5).hex == "#8018181F"
 
     def test_lighten(self):
-        assert Color(hex=colorgroup["base"]).lighten(1) == Color(hex="#FF30303E")
+        assert Color(colorgroup["base"]).lighten(1) == Color("#FF30303E")
 
     def test_darken(self):
-        assert Color(hex=colorgroup["result"]).lighten(-0.5) == Color(hex=colorgroup["base"])
+        assert Color(colorgroup["result"]).lighten(-0.5) == Color(colorgroup["base"])
 
     # tests for 24bit
 
     def test_hex_prop24(self):
-        assert Color(hex=colorgroup24["base"]).hex == colorgroup24["base"]
+        assert Color(colorgroup24["base"]).hex == colorgroup24["base"]
 
     def test_sint_prop24(self):
-        assert Color(hex=colorgroup24["base"]).sint == colorgroup24["s_int"]
+        assert Color(colorgroup24["base"]).sint == colorgroup24["s_int"]
 
     def test_argb_prop24(self):
-        assert Color(hex=colorgroup24["base"]).argb == colorgroup24["argb"]
+        assert Color(colorgroup24["base"]).argb == colorgroup24["argb"]
 
     def test_lighten24(self):
-        assert Color(colorgroup24["base"]).lighten(1) == Color(hex=colorgroup24["result"])
+        assert Color(colorgroup24["base"]).lighten(1) == Color(colorgroup24["result"])
 
     def test_darken24(self):
-        assert Color(hex=colorgroup24["result"]).lighten(-0.5) == Color(hex=colorgroup24["base"])
+        assert Color(colorgroup24["result"]).lighten(-0.5) == Color(colorgroup24["base"])
